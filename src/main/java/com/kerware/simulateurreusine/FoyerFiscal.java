@@ -26,20 +26,6 @@ public class FoyerFiscal {
         this.parentIsole = false;
     }
 
-	public FoyerFiscal(int revenuNetDecl1,
-                       int revenuNetDecl2,
-                       SituationFamiliale situationFam,
-                       int nbEnfants,
-                       int nbEnfantsHandicapes,
-                       boolean parentIsole) {
-
-        this.revenuNetDeclarant1 = revenuNetDecl1;
-        this.revenuNetDeclarant2 = revenuNetDecl2;
-        this.situationFamiliale = situationFam;
-        this.nombreEnfants = nbEnfants;
-        this.nombreEnfantsHandicapes = nbEnfantsHandicapes;
-        this.parentIsole = parentIsole;
-    }
 
     public int getRevenuNetDeclarant1() {
         return revenuNetDeclarant1;

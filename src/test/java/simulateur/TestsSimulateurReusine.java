@@ -252,4 +252,26 @@ public class TestsSimulateurReusine {
         assertEquals(0, simulateur.getRevenuFiscalReference());
     }
 
+    public static Stream<Arguments> donneesContribExceptionnelle() {
+        return Stream.of(
+                Arguments.of(400000, 4075.0),
+                Arguments.of(510000, 7375.0),
+                Arguments.of(100000, 0.0)
+        );
+    }
+
+    @DisplayName("Test de contribution exceptionnelle sur hauts revenus")
+    @ParameterizedTest
+    @MethodSource("donneesContribExceptionnelle")
+    public void testContribExceptionnelle(int revenu, double contribAttendue) {
+        simulateur.setRevenusNetDeclarant1(revenu);
+        simulateur.setRevenusNetDeclarant2(0);
+        simulateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        simulateur.setNbEnfantsACharge(0);
+        simulateur.setNbEnfantsSituationHandicap(0);
+        simulateur.setParentIsole(false);
+        simulateur.calculImpotSurRevenuNet();
+        assertEquals((int) contribAttendue, (int) simulateur.getContribExceptionnelle());
+    }
+
 }
