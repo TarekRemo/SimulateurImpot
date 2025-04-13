@@ -1,4 +1,7 @@
-package com.kerware.simulateur;
+package com.kerware.ancienSimulateur;
+
+import com.kerware.ICalculateurImpot;
+import com.kerware.SituationFamiliale;
 
 public class AdaptateurSimulateur implements ICalculateurImpot {
 

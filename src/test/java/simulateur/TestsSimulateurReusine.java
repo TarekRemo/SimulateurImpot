@@ -2,7 +2,8 @@ package simulateur;
 
 import com.kerware.ICalculateurImpot;
 import com.kerware.SituationFamiliale;
-import com.kerware.ancienSimulateur.AdaptateurSimulateur;
+import com.kerware.simulateurreusine.simulateur.AdaptateurSimulateurReusine;
+import com.kerware.simulateurreusine.simulateur.SimulateurReusine;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -16,13 +17,13 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TestsSimulateur {
+public class TestsSimulateurReusine {
 
     private static ICalculateurImpot simulateur;
 
     @BeforeAll
     public static void setUp() {
-        simulateur = new AdaptateurSimulateur();
+        simulateur = new AdaptateurSimulateurReusine();
     }
 
     public static Stream<Arguments> donneesPartsFoyerFiscal() {
