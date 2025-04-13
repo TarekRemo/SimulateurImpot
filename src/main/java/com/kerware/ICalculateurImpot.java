@@ -3,6 +3,7 @@ package com.kerware;
 public interface ICalculateurImpot {
 
     public void setRevenusNetDeclarant1( int rn );
+    
     public void setRevenusNetDeclarant2( int rn );
     public void setSituationFamiliale( SituationFamiliale sf );
     public void setNbEnfantsACharge( int nbe );
