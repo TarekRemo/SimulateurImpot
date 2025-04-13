@@ -7,6 +7,7 @@ import com.kerware.simulateurreusine.simulateur.SimulateurReusine;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -194,6 +195,48 @@ public class TestsSimulateurReusine {
 
         // Assert
         assertEquals(   Integer.valueOf(impotAttendu), simulateur.getImpotSurRevenuNet());
+    }
+
+
+    @DisplayName("Test de décote pour contribuable modeste")
+    @Test
+    public void testDecoteSeul() {
+        simulateur.setRevenusNetDeclarant1(15000);
+        simulateur.setRevenusNetDeclarant2(0);
+        simulateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        simulateur.setNbEnfantsACharge(0);
+        simulateur.setNbEnfantsSituationHandicap(0);
+        simulateur.setParentIsole(false);
+        simulateur.calculImpotSurRevenuNet();
+        int decote = simulateur.getDecote();
+        assert(decote == 0);
+    }
+
+    @DisplayName("Test abattement maximum pour couple")
+    @Test
+    public void testAbattementMaxCouple() {
+        simulateur.setRevenusNetDeclarant1(500000);
+        simulateur.setRevenusNetDeclarant2(500000);
+        simulateur.setSituationFamiliale(SituationFamiliale.MARIE);
+        simulateur.setNbEnfantsACharge(0);
+        simulateur.setNbEnfantsSituationHandicap(0);
+        simulateur.setParentIsole(false);
+        simulateur.calculImpotSurRevenuNet();
+        assertEquals(14171 * 2, simulateur.getAbattement());
+    }
+
+    @DisplayName("Test abattement minimal pour petit revenu déclarant 2")
+    @Test
+    public void testAbattementMinDeclarant2() {
+        simulateur.setRevenusNetDeclarant1(10000);
+        simulateur.setRevenusNetDeclarant2(200);
+        simulateur.setSituationFamiliale(SituationFamiliale.PACSE);
+        simulateur.setNbEnfantsACharge(0);
+        simulateur.setNbEnfantsSituationHandicap(0);
+        simulateur.setParentIsole(false);
+        simulateur.calculImpotSurRevenuNet();
+
+        assertEquals(1495, simulateur.getAbattement());
     }
 
 }
