@@ -239,4 +239,17 @@ public class TestsSimulateurReusine {
         assertEquals(1495, simulateur.getAbattement());
     }
 
+    @DisplayName("Test revenu fiscal de référence négatif corrigé à 0")
+    @Test
+    public void testRevenuFiscalNegatif() {
+        simulateur.setRevenusNetDeclarant1(100); // très faible revenu
+        simulateur.setRevenusNetDeclarant2(0);
+        simulateur.setSituationFamiliale(SituationFamiliale.CELIBATAIRE);
+        simulateur.setNbEnfantsACharge(0);
+        simulateur.setNbEnfantsSituationHandicap(0);
+        simulateur.setParentIsole(false);
+        simulateur.calculImpotSurRevenuNet();
+        assertEquals(0, simulateur.getRevenuFiscalReference());
+    }
+
 }
