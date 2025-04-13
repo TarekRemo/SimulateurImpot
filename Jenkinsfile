@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven 3.9.6'     // Le nom Maven configuré dans Jenkins (Global Tool Configuration)
-        jdk 'JDK 17'            // Le nom du JDK (doit être exactement ce que tu as mis dans Jenkins)
-    }
-
     triggers {
         // Scrutation Git toutes les 2 minutes
         pollSCM('H/2 * * * *')
