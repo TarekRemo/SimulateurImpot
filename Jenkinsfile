@@ -1,10 +1,8 @@
 pipeline {
     agent any
 
-
     triggers {
-        // Scrutation toutes les 2 minutes
-        pollSCM('H/2 * * * *')
+        pollSCM('H/2 * * * *')  // Scrutation Git toutes les 2 minutes
     }
 
     stages {
@@ -28,11 +26,11 @@ pipeline {
 
         stage('Coverage Report (JaCoCo)') {
             steps {
-                recordCoverage tools: [jacoco()], sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
+                recordCoverage tools: [jacoco()]  // ✅ ligne corrigée
             }
         }
 
-        stage('CheckStyle') {
+        stage('CheckStyle Report') {
             steps {
                 recordIssues tools: [checkStyle(pattern: 'target/checkstyle-result.xml')]
             }
