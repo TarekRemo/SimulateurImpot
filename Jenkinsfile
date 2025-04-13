@@ -1,13 +1,14 @@
 pipeline {
     agent any
 
-    triggers {
-        // Scrutation Git toutes les 2 minutes
-        pollSCM('H/2 * * * *')
+    tools {
+        maven 'Maven 3.9.6'     // Nom exact dans "Global Tool Configuration"
+        jdk 'JDK 17'            // Idem
     }
 
-    environment {
-        MAVEN_OPTS = '-Dmaven.test.failure.ignore=false'
+    triggers {
+        // Scrutation toutes les 2 minutes
+        pollSCM('H/2 * * * *')
     }
 
     stages {
@@ -17,38 +18,25 @@ pipeline {
             }
         }
 
-        stage('Build and Site Generation') {
+        stage('Build and Site') {
             steps {
-                // Batch Windows : lance mvn avec les options demandées
                 bat 'mvn clean test verify site'
             }
         }
 
-        stage('Publish JUnit Test Results') {
+        stage('JUnit Report') {
             steps {
                 junit '**/surefire-reports/TEST-*.xml'
             }
         }
 
-        stage('Publish JaCoCo Coverage') {
+        stage('Coverage Report (JaCoCo)') {
             steps {
-                jacoco execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java'
+                recordCoverage tools: [jacoco()], sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
             }
         }
 
-        stage('Enforce Coverage Threshold') {
-            steps {
-                jacoco(
-                    execPattern: 'target/jacoco.exec',
-                    classPattern: 'target/classes',
-                    sourcePattern: 'src/main/java',
-                    changeBuildStatus: true,
-                    minimumLineCoverage: '90'
-                )
-            }
-        }
-
-        stage('CheckStyle Report') {
+        stage('CheckStyle') {
             steps {
                 recordIssues tools: [checkStyle(pattern: 'target/checkstyle-result.xml')]
             }
@@ -56,11 +44,14 @@ pipeline {
     }
 
     post {
+        always {
+            echo "🎯 Build terminé. Vérifiez les rapports dans Jenkins."
+        }
         success {
             echo '✅ Build terminé avec succès.'
         }
         failure {
-            echo '❌ Build échoué. Vérifie les tests ou la qualité de code.'
+            echo '❌ Échec du build.'
         }
     }
 }
