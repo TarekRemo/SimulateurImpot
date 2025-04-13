@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven 3.9.6'     // Nom exact dans "Global Tool Configuration"
-        jdk 'JDK 17'            // Idem
-    }
 
     triggers {
         // Scrutation toutes les 2 minutes
