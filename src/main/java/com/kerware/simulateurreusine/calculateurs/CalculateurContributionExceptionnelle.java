@@ -8,23 +8,30 @@ import com.kerware.ParametresImposition;
 public class CalculateurContributionExceptionnelle {
 
     /**
-     * Calcule le montant de la contribution exceptionnelle (CEHR) en fonction des paramètres d'imposition.
-     * @see ParametresImposition.java
+     * Calcule le montant de la contribution exceptionnelle (CEHR)
+     * en fonction des paramètres d'imposition.
+     * @see ParametresImposition
+     * @param revenuFiscalRef le revenu fiscal de référence
+     * @param nombrePartsDeclarants le nombre de parts fiscales
+     * @return le montant de la contribution exceptionnelle
      */
-    public static double calculerContribution(double revenuFiscalRef, double nombrePartsDeclarants) {
-        // On distingue personne seule (1 part) et couple (2 parts) pour choisir les taux adaptés
+    public static double calculerContribution(
+            double revenuFiscalRef,
+            double nombrePartsDeclarants
+    ) {
+        // On distingue personne seule (1 part) et couple (2 parts)
+        // pour choisir les taux adaptés
         double[] taux = (nombrePartsDeclarants == 1.0)
                 ? ParametresImposition.CEHR_TAUX_CELIBATAIRE
                 : ParametresImposition.CEHR_TAUX_COUPLE;
 
         int[] seuils = ParametresImposition.CEHR_SEUILS;
-
         double contribution = 0.0;
 
         // Calcul par tranches
         for (int i = 0; i < taux.length; i++) {
             if (i == taux.length - 1) {
-                // dernière tranche
+                // Dernière tranche
                 if (revenuFiscalRef > seuils[i]) {
                     contribution += (revenuFiscalRef - seuils[i]) * taux[i];
                 }
@@ -45,4 +52,3 @@ public class CalculateurContributionExceptionnelle {
         return Math.round(contribution);
     }
 }
-

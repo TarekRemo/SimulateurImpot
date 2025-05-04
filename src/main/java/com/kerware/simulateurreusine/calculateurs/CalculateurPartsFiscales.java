@@ -8,23 +8,28 @@ import com.kerware.simulateurreusine.FoyerFiscal;
  */
 public class CalculateurPartsFiscales {
 
+    private static final double PART_CELIBATAIRE = 1.0;
+    private static final double PART_MARIE_PACSE = 2.0;
+    private static final double PART_ENFANT = 0.5;
+    private static final double MAJORATION_PARENT_ISOLE = 0.5;
+    private static final double MAJORATION_VEUF = 1.0;
+    private static final double MAJORATION_ENFANT_HANDICAPE = 0.5;
+
     /**
      * Retourne le nombre de parts "de base" correspondant aux déclarants.
      */
     public static double calculerPartsDeclarants(SituationFamiliale situation) {
         switch (situation) {
             case CELIBATAIRE:
-            	return 1.0;
             case DIVORCE:
-            	return 1.0;
             case VEUF:
-                return 1.0;
+                return PART_CELIBATAIRE;
             case MARIE:
-                return 2.0;
             case PACSE:
-                return 2.0;
+                return PART_MARIE_PACSE;
+            default:
+                return PART_CELIBATAIRE;
         }
-        return 1.0; 
     }
 
     /**
@@ -38,29 +43,21 @@ public class CalculateurPartsFiscales {
         // 0,5 part pour les 2 premiers enfants, 1 part à partir du 3e
         double partsEnfants;
         if (nbEnfants <= 2) {
-            partsEnfants = nbEnfants * 0.5;
+            partsEnfants = nbEnfants * PART_ENFANT;
         } else {
-            // 2 premiers enfants => 2 * 0.5 = 1 part
-            // à partir du 3ème => (nbEnfants - 2) parts
-            partsEnfants = 1.0 + (nbEnfants - 2);
+            partsEnfants = PART_ENFANT * 2 + (nbEnfants - 2);
         }
 
-        // Majoration si parent isolé et au moins 1 enfant
-        double majorationParentIsole = 0.0;
-        if (foyer.isParentIsole() && nbEnfants > 0) {
-            majorationParentIsole = 0.5; 
-        }
+        double majorationParentIsole = 
+            (foyer.isParentIsole() && nbEnfants > 0) ? MAJORATION_PARENT_ISOLE : 0.0;
 
-        // Si veuf(ve) avec enfants à charge, on conserve la part du conjoint décédé
-        double majorationVeuf = 0.0;
-        if (foyer.getSituationFamiliale() == SituationFamiliale.VEUF && nbEnfants > 0) {
-            majorationVeuf = 1.0;
-        }
+        double majorationVeuf =
+            (foyer.getSituationFamiliale() == SituationFamiliale.VEUF && nbEnfants > 0)
+            ? MAJORATION_VEUF : 0.0;
 
-        // 0.5 part supplémentaire par enfant handicapé
-        double majorationEnfHand = nbEnfHand * 0.5;
+        double majorationEnfHand = nbEnfHand * MAJORATION_ENFANT_HANDICAPE;
 
-        return partsBase + partsEnfants + majorationParentIsole + majorationVeuf + majorationEnfHand;
+        return partsBase + partsEnfants + majorationParentIsole
+                + majorationVeuf + majorationEnfHand;
     }
 }
-

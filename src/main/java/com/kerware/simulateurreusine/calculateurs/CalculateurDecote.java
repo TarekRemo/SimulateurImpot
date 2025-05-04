@@ -8,7 +8,8 @@ import com.kerware.ParametresImposition;
 public class CalculateurDecote {
 
     /**
-     * Calcule le montant de la décote à appliquer en fonction des paramètres d'imposition.
+     * Calcule le montant de la décote à appliquer en 
+     * fonction des paramètres d'imposition.
      * @see ParametresImposition.java
      * @param impotBrut  impôt brut avant décote
      * @param nombrePartsDeclarants 1 si personne seule, 2 si couple
@@ -20,12 +21,14 @@ public class CalculateurDecote {
         if (nombrePartsDeclarants == 1.0) {
             // personne seule
             if (impotBrut < ParametresImposition.DECOTE_SEUIL_PERSONNE_SEULE) {
-                decote = ParametresImposition.DECOTE_MAX_PERSONNE_SEULE - (impotBrut * ParametresImposition.TAUX_DECOTE);
+                decote = ParametresImposition.DECOTE_MAX_PERSONNE_SEULE 
+                - (impotBrut * ParametresImposition.TAUX_DECOTE);
             }
         } else if (nombrePartsDeclarants == 2.0) {
             // couple
             if (impotBrut < ParametresImposition.DECOTE_SEUIL_COUPLE) {
-                decote = ParametresImposition.DECOTE_MAX_COUPLE - (impotBrut * ParametresImposition.TAUX_DECOTE);
+                decote = ParametresImposition.DECOTE_MAX_COUPLE 
+                - (impotBrut * ParametresImposition.TAUX_DECOTE);
             }
         }
         
